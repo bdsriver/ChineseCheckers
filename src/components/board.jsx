@@ -137,7 +137,8 @@ function Board(props){
     for (let j=0; j<rowlen[i]; j++){
       const x = (7.5-(rowlen[i]-1)/2+j)*100/15;
       let currColor = openmoves.includes(currID) ? boardMacros.moveColor :colors[pieceOn[currID]];
-      if ((prevPath.slice(0,-1)).includes(Number(currID))) {
+      //if the previous player moved through a space and we cannot move there, highlight it
+      if ((prevPath.slice(0,-1)).includes(Number(currID)) && currColor != boardMacros.moveColor) {
         currColor = boardMacros.prevPathColor;
       }
       spaces.push(<circle className='space' id={currID} cx={x} cy={(i+0.5)*100/17}
