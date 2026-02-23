@@ -1,11 +1,3 @@
-.space {
-  fill: var(--color);
-  stroke: black;
-  stroke-width: 0.1;
-  cursor: var(--space-hover);
-  r: 2;
-}
-
 .board-edge {
   fill: #edb878;
   stroke: black;
@@ -18,38 +10,6 @@
   display: block;
 }
 
-.turn-button {
-  position: absolute;
-  bottom: min(10vh, 10vw);
-  right: min(10vh, 10vw);
-  z-index: 1;
-
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-
-  background-color: #946c3c;
-  color: #f9f9f9;
-  border-color: #0f0000;
-  border-radius: 8px;
-}
-
-.engine-button {
-  position:absolute;
-  bottom: min(2vh, 2vw);
-  right: min(10vh, 10vw);
-  z-index: 1;
-
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-
-  background-color: #946c3c;
-  color: #f9f9f9;
-  border-color: #0f0000;
-  border-radius: 8px;
-}
-
 .turn-display {
   position: absolute;
   bottom: min(75vh, 75vw);
@@ -58,7 +18,7 @@
   border-radius: 8px;
   background-color: #f9f9f9;
   display: grid;
-  grid-template-columns: auto auto ;
+  grid-template-columns: auto auto;
   align-items: center;
   row-gap: 4px;
   column-gap: 4px;
