@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Board from "./components/Board";
 import StartMenu from "./components/StartMenu";
-import { restartEngine } from "./utils/engineWrapper";
+import { restartEngine } from "./engine";
 
-function App() {
+export default function App() {
   const [gameStarted, setGameStarted] = useState(false);
 
   function onGameStart(playerCount: number) {
@@ -18,5 +18,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

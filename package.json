@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --clearScreen false",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "vite build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",
@@ -17,6 +15,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
+    "@types/node": "^25.3.3",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",

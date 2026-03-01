@@ -1,5 +1,5 @@
-import createModule from "../generated/engine/engine.js";
-import { BOARD_MACROS } from "./macros.js";
+import "./engine/engine.js";
+import { BOARD_MACROS } from "./macros";
 
 export enum PlayerCount {
   Two,
@@ -20,9 +20,8 @@ let currentPlayerCount: PlayerCount = PlayerCount.Two;
 export function restartEngine(playerCount?: PlayerCount) {
   engine?.delete();
 
-  createModule().then((Module) => {
+  Module.createModule().then((Module) => {
     currentPlayerCount = playerCount ?? currentPlayerCount;
-    // @ts-expect-error Module is type {}
     engine = new Module.Engine(currentPlayerCount);
   });
 }

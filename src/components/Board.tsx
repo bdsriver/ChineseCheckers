@@ -1,11 +1,7 @@
 import "./board.css";
 import { useState } from "react";
-import {
-  engine,
-  getStartBoard,
-  restartEngine,
-} from "../utils/engineWrapper.js";
-import { BOARD_MACROS } from "../utils/macros.js";
+import { engine, getStartBoard, restartEngine } from "../engine";
+import { BOARD_MACROS } from "../macros";
 
 const ENGINE_DEPTH = 3;
 const PLAYER_COLORS = [
