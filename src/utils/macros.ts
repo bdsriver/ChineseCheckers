@@ -4,6 +4,7 @@ interface BoardMacros {
   rowLengths: number[];
   moves: number[][];
   jumps: [number, number][][];
+  starts: number[][];
 }
 
 // @ts-expect-error Json doesn't support tuple types
