@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chinese Checkers</title>
     <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link href="/src/index.css" rel="stylesheet">
   </head>
-  <body>
-    <div class="flex justify-center items-center m-0 text-center"></div>
-    <script type="module" src="/src/main.jsx"></script>
+  <body class="bg-stone-800">
+    <div class="flex items-center justify-center m-0 h-dvh w-dvw">
+      <canvas width="1000px" height="1000px" id="main-canvas" class="absolute w-140"></canvas>
+      <div class="w-1/5 left-3 top-30 absolute flex flex-col items-center justify-center bg-gray-300 inset-shadow-sm inset-shadow-black">
+        <h1 class="text-2xl">Game Setup</h1>
+        Some settings here...
+      </div>
+      <div class="w-1/5 right-3 top-30 absolute flex flex-col items-center justify-center bg-gray-300 inset-shadow-sm inset-shadow-black">
+        <h1 class="text-2xl">Move Log</h1>
+        Space 1 -> Space 2
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -7,18 +7,14 @@
     "dev": "vite --clearScreen false",
     "build": "vite build"
   },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.2.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.2.0"
-  },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
+    "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^25.3.3",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
+    "tailwindcss": "^4.2.1",
     "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "colorjs.io": "^0.6.1"
   }
 }
