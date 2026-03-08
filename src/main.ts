@@ -1,25 +1,27 @@
-import { BoardRenderer } from "./BoardRenderer";
+import { BoardBuilder } from "./board";
+import { BoardRenderer } from "./board/renderer";
 import "./index.css";
-import { BOARD_MACROS } from "./macros";
 
-function main() {
+async function main() {
   const canvas = document.getElementById(
     "main-canvas",
   ) as HTMLCanvasElement | null;
   const ctx = canvas?.getContext("2d");
 
   if (!ctx) {
-    throw new Error("Canvas 2d not supported");
+    alert("Unsupported browser configuration: Could not get Canvas2D context");
+    return;
   }
 
-  const board = new BoardRenderer(ctx);
-  const initial = Array(BOARD_MACROS.positions.length).fill(6);
-  for (let i = 0; i < 6; i++) {
-    for (const index of BOARD_MACROS.starts[i]) {
-      initial[index] = i;
-    }
-  }
-  board.render(initial);
+  const renderer = new BoardRenderer(ctx);
+  const boardBuilder = new BoardBuilder();
+  boardBuilder.addPlayer(0, 4);
+  boardBuilder.addPlayer(2, 5);
+  boardBuilder.addPlayer(5, 0);
+  boardBuilder.addPlayer(4, 1);
+  boardBuilder.addPlayer(3, 2);
+  boardBuilder.addPlayer(1, 3);
+  renderer.render(boardBuilder.previewBoard());
 }
 
-main();
+void main();
