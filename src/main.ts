@@ -1,11 +1,16 @@
 import { BoardBuilder } from "./board";
 import { BoardRenderer } from "./board/renderer";
 import "./index.css";
+import { renderPage } from "./page";
+import { initAppState as initialAppState } from "./state";
 
 async function main() {
+  renderPage(initialAppState());
+
   const canvas = document.getElementById(
     "main-canvas",
   ) as HTMLCanvasElement | null;
+
   const ctx = canvas?.getContext("2d");
 
   if (!ctx) {
@@ -13,15 +18,17 @@ async function main() {
     return;
   }
 
-  const renderer = new BoardRenderer(ctx);
+  const boardRenderer = new BoardRenderer(ctx);
+
   const boardBuilder = new BoardBuilder();
   boardBuilder.addPlayer(0, 4);
-  boardBuilder.addPlayer(2, 5);
-  boardBuilder.addPlayer(5, 0);
-  boardBuilder.addPlayer(4, 1);
-  boardBuilder.addPlayer(3, 2);
   boardBuilder.addPlayer(1, 3);
-  renderer.render(boardBuilder.previewBoard());
+  boardBuilder.addPlayer(2, 5);
+  boardBuilder.addPlayer(3, 2);
+  boardBuilder.addPlayer(4, 1);
+  boardBuilder.addPlayer(5, 0);
+
+  boardRenderer.render(boardBuilder.previewBoard());
 }
 
 void main();
