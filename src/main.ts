@@ -1,4 +1,4 @@
-import { BoardBuilder } from "./board";
+import { BoardBuilder } from "./board/builder";
 import { BoardRenderer } from "./board/renderer";
 import "./index.css";
 import { renderPage } from "./page";
@@ -18,8 +18,6 @@ async function main() {
     return;
   }
 
-  const boardRenderer = new BoardRenderer(ctx);
-
   const boardBuilder = new BoardBuilder();
   boardBuilder.addPlayer(0, 4);
   boardBuilder.addPlayer(1, 3);
@@ -28,7 +26,8 @@ async function main() {
   boardBuilder.addPlayer(4, 1);
   boardBuilder.addPlayer(5, 0);
 
-  boardRenderer.render(boardBuilder.previewBoard());
+  const board = await boardBuilder.build();
+  const boardRenderer = new BoardRenderer(ctx, board);
 }
 
 void main();

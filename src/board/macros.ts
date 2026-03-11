@@ -1,5 +1,7 @@
+import type { Vector2d } from "../vector";
+
 interface BoardMacros {
-  positions: { x: number; y: number }[];
+  positions: Vector2d[];
   moves: [number, number, number, number, number, number][];
   starts: number[][];
 }
@@ -62,9 +64,9 @@ export const BOARD_MACROS = (() => {
     }
 
     for (let j = 0; j < rowLength; j++) {
-      const x = (j + 8 - rowLength / 2) / 15
-      const y = (i + 0.5) / 17
-      macros.positions.push({x,y})
+      const x = (j + 8 - rowLength / 2) / 15;
+      const y = (i + 0.5) / 17;
+      macros.positions.push({ x, y });
     }
   }
 
