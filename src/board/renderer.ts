@@ -3,6 +3,21 @@ import { EMPTY_CELL, type Board } from "../board";
 import type { Vector2d } from "../vector";
 import { BOARD_MACROS } from "./macros";
 
+const COLOR_OPTIONS = {
+  RED: new Color("#9b0606"),
+  ORANGE: new Color("#df6800"),
+  YELLOW: new Color("#aca408"),
+  GREEN: new Color("#026d10"),
+  BLUE: new Color("#2e3ef0"),
+  PURPLE: new Color("#800080"),
+  WHITE: new Color("#aaacaf"),
+  GRAY: new Color("#5e5e5e"),
+  BLACK: new Color("#292e2a"),
+  PINK: new Color("#dd37bf"),
+  LIME: new Color("#1bb510"),
+  AQUA: new Color("#0cadaa"),
+} as const;
+
 /** Diameter of board, in screen pixels */
 const BOARD_DIAMETER_PIXELS = 540;
 /** Diameter of piece, in percent of board diameter */
@@ -11,12 +26,12 @@ const COLORS = {
   BOARD: new Color("#edb878"),
   EMPTY: new Color("#423627"),
   PLAYERS: [
-    new Color("#008000"),
-    new Color("#9b0606"),
-    new Color("#800080"),
-    new Color("#2e3ef0"),
-    new Color("#df6800"),
-    new Color("#aca408"),
+    COLOR_OPTIONS.BLACK,
+    COLOR_OPTIONS.WHITE,
+    COLOR_OPTIONS.AQUA,
+    COLOR_OPTIONS.PINK,
+    COLOR_OPTIONS.GRAY,
+    COLOR_OPTIONS.LIME,
   ],
 } as const;
 
