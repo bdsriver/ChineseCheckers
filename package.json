@@ -15,7 +15,6 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
-    "colorjs.io": "^0.6.1",
-    "vanjs-core": "^1.6.0"
+    "colorjs.io": "^0.6.1"
   }
 }

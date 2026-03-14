@@ -1,12 +1,8 @@
 import { BoardBuilder } from "./board/builder";
 import { BoardRenderer } from "./board/renderer";
 import "./index.css";
-import { renderPage } from "./page";
-import { initAppState as initialAppState } from "./state";
 
 async function main() {
-  renderPage(initialAppState());
-
   const canvas = document.getElementById(
     "main-canvas",
   ) as HTMLCanvasElement | null;
