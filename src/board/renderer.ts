@@ -1,33 +1,15 @@
-import Color from "colorjs.io";
-import { EMPTY_CELL, type Board } from "../board";
+import { type Board, EMPTY_CELL } from "../board";
 import type { Vector2d } from "../vector";
 import { BOARD_MACROS } from "./macros";
-import { BoardRenderingConstants } from "./renderer/constants";
-import { drawBoardState, drawLightedSphere } from "./renderer/drawFunctions";
+import {
+  type BoardRendererConstants,
+  computeConstants,
+} from "./renderer/constants";
+import { drawBoardState, drawPiece } from "./renderer/drawFunctions";
+import { screenToCanvasSpace, withinCircle } from "./renderer/mouseFunctions";
 
-const COLOR_OPTIONS = {
-  RED: new Color("#9b0606"),
-  ORANGE: new Color("#df6800"),
-  YELLOW: new Color("#aca408"),
-  GREEN: new Color("#026d10"),
-  BLUE: new Color("#2e3ef0"),
-  PURPLE: new Color("#800080"),
-  WHITE: new Color("#aaacaf"),
-  GRAY: new Color("#5e5e5e"),
-  BLACK: new Color("#292e2a"),
-  PINK: new Color("#dd37bf"),
-  LIME: new Color("#1bb510"),
-  AQUA: new Color("#0cadaa"),
-} as const;
-
-const PLAYER_COLORS = [
-  COLOR_OPTIONS.BLACK,
-  COLOR_OPTIONS.WHITE,
-  COLOR_OPTIONS.AQUA,
-  COLOR_OPTIONS.PINK,
-  COLOR_OPTIONS.GRAY,
-  COLOR_OPTIONS.LIME,
-];
+/** Adds some padding to the hover radius of board positions */
+const HOVER_MULTIPLIER = 11 / 8;
 
 export class BoardRenderer {
   private ctx: CanvasRenderingContext2D;
@@ -35,25 +17,18 @@ export class BoardRenderer {
   private activePieceIndex: number | undefined;
   private mousePosition: Vector2d;
   private board: Board;
-  private BOARD_CONSTANTS: BoardRenderingConstants;
+  private constants: BoardRendererConstants;
 
   constructor(ctx: CanvasRenderingContext2D, board: Board) {
     this.ctx = ctx;
+    this.constants = computeConstants(ctx);
     this.hoveredPieceIndex = undefined;
     this.activePieceIndex = undefined;
     this.mousePosition = { x: 0, y: 0 };
     this.board = board;
-    this.BOARD_CONSTANTS = new BoardRenderingConstants(ctx);
 
     ctx.canvas.onmousemove = (e) => {
-      this.mousePosition = {
-        x:
-          (e.x - this.ctx.canvas.offsetLeft) *
-          (this.ctx.canvas.width / this.ctx.canvas.offsetWidth),
-        y:
-          (e.y - this.ctx.canvas.offsetTop) *
-          (this.ctx.canvas.height / this.ctx.canvas.offsetHeight),
-      };
+      this.mousePosition = screenToCanvasSpace(this.ctx, { x: e.x, y: e.y });
       this.onMouseMove();
     };
 
@@ -104,12 +79,11 @@ export class BoardRenderer {
     this.hoveredPieceIndex = undefined;
 
     for (let i = 0; i < BOARD_MACROS.positions.length; i++) {
-      const withinPiece =
-        (this.mousePosition.x - this.BOARD_CONSTANTS.PIECE_POSITIONS[i].x) **
-          2 +
-          (this.mousePosition.y - this.BOARD_CONSTANTS.PIECE_POSITIONS[i].y) **
-            2 <=
-        this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS ** 2;
+      const withinPiece = withinCircle(
+        this.mousePosition,
+        this.constants.PIECE_POSITIONS[i],
+        this.constants.PIECE_RADIUS_CANVAS * HOVER_MULTIPLIER,
+      );
       if (withinPiece) {
         this.hoveredPieceIndex = i;
       }
@@ -136,13 +110,13 @@ export class BoardRenderer {
 
     drawBoardState(
       this.ctx,
-      this.BOARD_CONSTANTS,
-      PLAYER_COLORS,
+      this.constants,
+      this.board.colors,
       this.board.state,
       this.activePieceIndex,
     );
 
-    // Render jump spots
+    /** Render jump spots */
     let targetPieceIndex: undefined | number;
     if (this.activePieceIndex !== undefined) {
       targetPieceIndex = this.activePieceIndex;
@@ -157,34 +131,33 @@ export class BoardRenderer {
       const availableMoves = this.board.availableMoves(targetPieceIndex);
 
       for (const move of availableMoves.values()) {
-        const color = PLAYER_COLORS[this.board.state[targetPieceIndex]].clone();
+        const color =
+          this.board.colors[this.board.state[targetPieceIndex]].clone();
 
         if (move === this.hoveredPieceIndex) {
-          drawLightedSphere(
+          drawPiece(
             this.ctx,
+            this.constants,
             color,
-            this.BOARD_CONSTANTS.PIECE_POSITIONS[move],
-            this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS,
-            false,
+            this.constants.PIECE_POSITIONS[move],
             2 / 3,
           );
         } else {
-          drawLightedSphere(
+          drawPiece(
             this.ctx,
+            this.constants,
             color,
-            this.BOARD_CONSTANTS.PIECE_POSITIONS[move],
-            this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS,
-            false,
+            this.constants.PIECE_POSITIONS[move],
             1 / 4,
           );
         }
       }
     }
 
-    // Render active piece
+    /** Render active piece */
     if (this.activePieceIndex !== undefined) {
       const color =
-        PLAYER_COLORS[this.board.state[this.activePieceIndex]].clone();
+        this.board.colors[this.board.state[this.activePieceIndex]].clone();
 
       const mouseVector: Vector2d = {
         x: this.mousePosition.x - 0.5 * this.ctx.canvas.width,
@@ -193,19 +166,12 @@ export class BoardRenderer {
       const mouseVectorLengthSquared =
         mouseVector.x * mouseVector.x + mouseVector.y * mouseVector.y;
       const boundaryRadiusSquared =
-        (this.BOARD_CONSTANTS.BOARD_DIAMETER_CANVAS / 2 -
-          this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS) **
+        (this.constants.BOARD_DIAMETER_CANVAS / 2 -
+          this.constants.PIECE_RADIUS_CANVAS) **
         2;
 
       if (mouseVectorLengthSquared <= boundaryRadiusSquared) {
-        drawLightedSphere(
-          this.ctx,
-          color,
-          this.mousePosition,
-          this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS,
-          false,
-          1,
-        );
+        drawPiece(this.ctx, this.constants, color, this.mousePosition, 1);
       } else {
         const adjustedPoint: Vector2d = {
           x:
@@ -218,17 +184,8 @@ export class BoardRenderer {
             0.5 * this.ctx.canvas.height,
         };
 
-        drawLightedSphere(
-          this.ctx,
-          color,
-          adjustedPoint,
-          this.BOARD_CONSTANTS.PIECE_RADIUS_CANVAS,
-          false,
-          1,
-        );
+        drawPiece(this.ctx, this.constants, color, adjustedPoint, 1);
       }
     }
   }
 }
-
-// TODO BoardBuilderRenderer? or just keep board and board builder in the same renderer?

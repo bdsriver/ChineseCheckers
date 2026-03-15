@@ -1,5 +1,5 @@
 import { BoardBuilder } from "./board/builder";
-import { BoardRenderer } from "./board/renderer";
+import { BoardBuilderRenderer } from "./board/builderRenderer";
 import "./index.css";
 
 async function main() {
@@ -15,15 +15,9 @@ async function main() {
   }
 
   const boardBuilder = new BoardBuilder();
-  boardBuilder.addPlayer(0, 4);
-  boardBuilder.addPlayer(1, 3);
-  boardBuilder.addPlayer(2, 5);
-  boardBuilder.addPlayer(3, 2);
-  boardBuilder.addPlayer(4, 1);
-  boardBuilder.addPlayer(5, 0);
-
-  const board = await boardBuilder.build();
-  const boardRenderer = new BoardRenderer(ctx, board);
+  const boardBuilderRenderer = new BoardBuilderRenderer(ctx, boardBuilder);
+  // @ts-expect-error Window constant
+  window.startGame = () => void boardBuilderRenderer.build();
 }
 
 void main();

@@ -1,3 +1,4 @@
+import Color from "colorjs.io";
 import { BOARD_MACROS } from "./board/macros";
 import type { Engine } from "./engine";
 
@@ -5,15 +6,16 @@ export const BOT_DEPTH = 3;
 export const EMPTY_CELL = 6;
 
 export class Board {
-  state: number[];
   private engine: Engine;
+  state: number[];
+  colors: Color[];
 
-  constructor(engine: Engine, state: number[]) {
-    this.state = state;
+  constructor(engine: Engine, state: number[], colors: Color[]) {
     this.engine = engine;
+    this.state = state;
+    this.colors = colors;
   }
 
-  // TODO cache this
   availableMoves(index: number) {
     const moves = new Set<number>();
 
