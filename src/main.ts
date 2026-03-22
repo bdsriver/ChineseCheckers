@@ -1,6 +1,8 @@
+import van from "vanjs-core";
 import { BoardBuilder } from "./board/builder";
 import { BoardBuilderRenderer } from "./board/builderRenderer";
 import "./index.css";
+import { page } from "./page";
 
 async function main() {
   const canvas = document.getElementById(
@@ -18,6 +20,8 @@ async function main() {
   const boardBuilderRenderer = new BoardBuilderRenderer(ctx, boardBuilder);
   // @ts-expect-error Window constant
   window.startGame = () => void boardBuilderRenderer.build();
+
+  van.add(document.body, page());
 }
 
 void main();

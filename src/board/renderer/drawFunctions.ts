@@ -4,23 +4,17 @@ import type { Vector2d } from "../../vector";
 import type { BoardRendererConstants } from "./constants";
 
 const SQRT_2 = 2 ** 0.5;
-const SQRT_3 = 3 ** 0.5;
 
+const PLAYER_COLORS = [
+  new Color("#9b0606"),
+  new Color("#026d10"),
+  new Color("#aaacaf"),
+  new Color("#aca408"),
+  new Color("#2e3ef0"),
+  new Color("#292e2a"),
+] as const;
 const BOARD_COLOR = new Color("#edb878");
 const EMPTY_COLOR = new Color("#a07d51");
-
-const CLUSTER_OFFSETS: Vector2d[] = [
-  { x: 2, y: 2 / SQRT_3 },
-  { x: 0, y: 2 / SQRT_3 },
-  { x: -2, y: 2 / SQRT_3 },
-  { x: 1, y: -1 / SQRT_3 },
-  { x: -1, y: -1 / SQRT_3 },
-  { x: 0, y: -4 / SQRT_3 },
-  { x: 1, y: 1 / SQRT_3 },
-  { x: -1, y: 1 / SQRT_3 },
-  { x: 0, y: -2 / SQRT_3 },
-  { x: 0, y: 0 },
-];
 
 export function drawCircle(
   ctx: CanvasRenderingContext2D,
@@ -110,20 +104,20 @@ export function drawHole(
     new Color("#000000"),
     position,
     constants.HOLE_RADIUS_CANVAS,
-    0.0
+    0.0,
   );
 }
 
 export function drawPiece(
   ctx: CanvasRenderingContext2D,
   constants: BoardRendererConstants,
-  fill: Color,
+  playerIndex: number,
   position: Vector2d,
   opacity: number,
 ) {
   drawLightedSphere(
     ctx,
-    fill,
+    PLAYER_COLORS[playerIndex],
     position,
     constants.PIECE_RADIUS_CANVAS,
     false,
@@ -134,7 +128,6 @@ export function drawPiece(
 export function drawBoardState(
   ctx: CanvasRenderingContext2D,
   constants: BoardRendererConstants,
-  playerColors: Color[],
   state: number[],
   activePieceIndex: number | undefined,
 ) {
@@ -158,34 +151,11 @@ export function drawBoardState(
   /** Render passive pieces */
   for (let i = 0; i < state.length; i++) {
     if (state[i] !== EMPTY_CELL) {
-      const color = playerColors[state[i]].clone();
-
       if (activePieceIndex !== i) {
-        drawPiece(ctx, constants, color, constants.PIECE_POSITIONS[i], 1.0);
+        drawPiece(ctx, constants, state[i], constants.PIECE_POSITIONS[i], 1.0);
       } else {
         drawHole(ctx, constants, constants.PIECE_POSITIONS[i]);
       }
     }
-  }
-}
-
-export function drawPieceCluster(
-  ctx: CanvasRenderingContext2D,
-  constants: BoardRendererConstants,
-  fill: Color,
-  center: Vector2d,
-  opacity: number,
-) {
-  for (const offset of CLUSTER_OFFSETS) {
-    drawPiece(
-      ctx,
-      constants,
-      fill,
-      {
-        x: constants.PIECE_RADIUS_CANVAS * offset.x + center.x,
-        y: constants.PIECE_RADIUS_CANVAS * offset.y + center.y,
-      },
-      opacity,
-    );
   }
 }

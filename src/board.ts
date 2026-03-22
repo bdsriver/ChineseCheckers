@@ -1,4 +1,3 @@
-import Color from "colorjs.io";
 import { BOARD_MACROS } from "./board/macros";
 import type { Engine } from "./engine";
 
@@ -8,12 +7,10 @@ export const EMPTY_CELL = 6;
 export class Board {
   private engine: Engine;
   state: number[];
-  colors: Color[];
 
-  constructor(engine: Engine, state: number[], colors: Color[]) {
+  constructor(engine: Engine, state: number[]) {
     this.engine = engine;
     this.state = state;
-    this.colors = colors;
   }
 
   availableMoves(index: number) {

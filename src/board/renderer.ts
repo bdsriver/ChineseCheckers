@@ -111,7 +111,6 @@ export class BoardRenderer {
     drawBoardState(
       this.ctx,
       this.constants,
-      this.board.colors,
       this.board.state,
       this.activePieceIndex,
     );
@@ -131,14 +130,11 @@ export class BoardRenderer {
       const availableMoves = this.board.availableMoves(targetPieceIndex);
 
       for (const move of availableMoves.values()) {
-        const color =
-          this.board.colors[this.board.state[targetPieceIndex]].clone();
-
         if (move === this.hoveredPieceIndex) {
           drawPiece(
             this.ctx,
             this.constants,
-            color,
+            this.board.state[targetPieceIndex],
             this.constants.PIECE_POSITIONS[move],
             2 / 3,
           );
@@ -146,7 +142,7 @@ export class BoardRenderer {
           drawPiece(
             this.ctx,
             this.constants,
-            color,
+            this.board.state[targetPieceIndex],
             this.constants.PIECE_POSITIONS[move],
             1 / 4,
           );
@@ -156,9 +152,6 @@ export class BoardRenderer {
 
     /** Render active piece */
     if (this.activePieceIndex !== undefined) {
-      const color =
-        this.board.colors[this.board.state[this.activePieceIndex]].clone();
-
       const mouseVector: Vector2d = {
         x: this.mousePosition.x - 0.5 * this.ctx.canvas.width,
         y: this.mousePosition.y - 0.5 * this.ctx.canvas.height,
@@ -171,7 +164,13 @@ export class BoardRenderer {
         2;
 
       if (mouseVectorLengthSquared <= boundaryRadiusSquared) {
-        drawPiece(this.ctx, this.constants, color, this.mousePosition, 1);
+        drawPiece(
+          this.ctx,
+          this.constants,
+          this.board.state[this.activePieceIndex],
+          this.mousePosition,
+          1,
+        );
       } else {
         const adjustedPoint: Vector2d = {
           x:
@@ -184,7 +183,13 @@ export class BoardRenderer {
             0.5 * this.ctx.canvas.height,
         };
 
-        drawPiece(this.ctx, this.constants, color, adjustedPoint, 1);
+        drawPiece(
+          this.ctx,
+          this.constants,
+          this.board.state[this.activePieceIndex],
+          adjustedPoint,
+          1,
+        );
       }
     }
   }
