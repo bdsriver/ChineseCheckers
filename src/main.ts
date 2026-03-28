@@ -1,5 +1,4 @@
 import van from "vanjs-core";
-import { BoardBuilder } from "./board/builder";
 import { BoardBuilderRenderer } from "./board/builderRenderer";
 import "./index.css";
 import { page } from "./page";
@@ -16,12 +15,8 @@ async function main() {
     return;
   }
 
-  const boardBuilder = new BoardBuilder();
-  const boardBuilderRenderer = new BoardBuilderRenderer(ctx, boardBuilder);
-  // @ts-expect-error Window constant
-  window.startGame = () => void boardBuilderRenderer.build();
-
-  van.add(document.body, page());
+  const boardBuilderRenderer = new BoardBuilderRenderer(ctx);
+  van.add(document.body, page(boardBuilderRenderer));
 }
 
 void main();

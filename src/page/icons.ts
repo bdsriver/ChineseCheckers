@@ -2,10 +2,20 @@ import van from "vanjs-core";
 
 const { svg, path } = van.tags("http://www.w3.org/2000/svg");
 
+const playerTriangleFills = [
+  path({ fill: "currentColor", d: "M9 17L15 17L12 22L9 17" }),
+  path({ fill: "currentColor", d: "M6 12L3 17L9 17L6 12" }),
+  path({ fill: "currentColor", d: "M6 12L3 7L9 7L6 12" }),
+  path({ fill: "currentColor", d: "M12 2L15 7L9 7L12 2" }),
+  path({ fill: "currentColor", d: "M18 12L15 7L21 7L18 12" }),
+  path({ fill: "currentColor", d: "M18 12L15 17L21 17L18 12" }),
+];
+
+/** Source https://tabler.io/icons (outline style, size 32, stroke 2) */
+/** HTML to JS conversion done with https://vanjs.org/convert */
 export const ICONS = {
   USER: svg(
     {
-      xmlns: "http://www.w3.org/2000/svg",
       viewBox: "0 0 24 24",
       fill: "none",
       stroke: "currentColor",
@@ -19,7 +29,6 @@ export const ICONS = {
   ),
   USER_GROUP: svg(
     {
-      xmlns: "http://www.w3.org/2000/svg",
       viewBox: "0 0 24 24",
       fill: "none",
       stroke: "currentColor",
@@ -37,7 +46,6 @@ export const ICONS = {
   ),
   TROPHY: svg(
     {
-      xmlns: "http://www.w3.org/2000/svg",
       viewBox: "0 0 24 24",
       fill: "none",
       stroke: "currentColor",
@@ -52,5 +60,19 @@ export const ICONS = {
     path({ d: "M17 4v8a5 5 0 0 1 -10 0v-8" }),
     path({ d: "M3 9a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" }),
     path({ d: "M17 9a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" }),
+  ),
+  PLAYER_POSITION_INDICATORS: playerTriangleFills.map((fill) =>
+    svg(
+      {
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "1",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+      },
+      path({ d: "M12 2l3 5h6l-3 5l3 5h-6l-3 5l-3 -5h-6l3 -5l-3 -5h6l3 -5" }),
+      fill,
+    ),
   ),
 } as const;

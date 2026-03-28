@@ -7,7 +7,7 @@ export function loginPanel() {
   const password = van.state("");
 
   return div(
-    { class: "flex flex-col gap-2" },
+    { class: "flex items-center flex-col gap-2" },
     input({
       class: "input",
       type: "text",

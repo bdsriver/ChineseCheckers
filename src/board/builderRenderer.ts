@@ -1,4 +1,4 @@
-import type { BoardBuilder } from "./builder";
+import { BoardBuilder, type BoardPosition } from "./builder";
 import { BoardRenderer } from "./renderer";
 import {
   type BoardRendererConstants,
@@ -6,51 +6,41 @@ import {
 } from "./renderer/constants";
 import { drawBoardState } from "./renderer/drawFunctions";
 
-/** Pieces on the board where the center */
-const INITIAL_POSITION_CENTERS = [116, 87, 24, 4, 33, 96];
-
-/**  A "cluster" refers to the pile of pieces off to the left before the game starts */
+export type PlayerCount = 2 | 3 | 4 | 6;
+export const INITIAL_PLAYERS: Record<PlayerCount, BoardPosition[]> = {
+  2: [0,3],
+  3: [0,2,4],
+  4: [1,2,4,5],
+  6: [0,1,2,3,4,5]
+}
 
 export class BoardBuilderRenderer {
   private ctx: CanvasRenderingContext2D;
   private constants: BoardRendererConstants;
   private board: BoardBuilder;
 
-  constructor(ctx: CanvasRenderingContext2D, board: BoardBuilder) {
+  constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.constants = computeConstants(ctx);
-    this.board = board;
-
-    ctx.canvas.onmousemove = () => {
-      this.onMouseMove();
-    };
-
-    ctx.canvas.onmousedown = () => {
-      this.onMouseDown();
-    };
-
-    ctx.canvas.onmouseup = () => {
-      this.onMouseUp();
-    };
+    this.board = new BoardBuilder();
 
     this.safeRender();
   }
 
-  private onMouseMove() {
-    this.computeHovered();
+  setPlayers(count: PlayerCount) {
+    this.board.removePlayer(0);
+    this.board.removePlayer(1);
+    this.board.removePlayer(2);
+    this.board.removePlayer(3);
+    this.board.removePlayer(4);
+    this.board.removePlayer(5);
+
+    for (const player of INITIAL_PLAYERS[count]) {
+      this.board.setPlayer(player);
+    }
+
     this.safeRender();
   }
-
-  private onMouseDown() {
-    this.safeRender();
-  }
-
-  private onMouseUp() {
-    this.computeHovered();
-    this.safeRender();
-  }
-
-  private computeHovered() {}
 
   private safeRender() {
     window.requestAnimationFrame(() => this.render());

@@ -3,18 +3,18 @@ import type { Engine } from "../engine";
 import { BOARD_MACROS } from "./macros";
 
 /** Initial start position around the board */
-export type Position = 0 | 1 | 2 | 3 | 4 | 5;
+export type BoardPosition = 0 | 1 | 2 | 3 | 4 | 5;
 
 export class BoardBuilder {
   state: number[];
-  included: Set<Position>;
+  included: Set<BoardPosition>;
 
   constructor() {
     this.state = Array<number>(BOARD_MACROS.positions.length).fill(EMPTY_CELL);
     this.included = new Set();
   }
 
-  setPlayer(position: Position) {
+  setPlayer(position: BoardPosition) {
     this.included.add(position);
 
     for (const index of BOARD_MACROS.starts[position]) {
@@ -22,7 +22,7 @@ export class BoardBuilder {
     }
   }
 
-  removePlayer(position: Position) {
+  removePlayer(position: BoardPosition) {
     this.included.delete(position);
 
     for (const index of BOARD_MACROS.starts[position]) {

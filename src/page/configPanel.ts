@@ -1,4 +1,5 @@
 import van, { type State } from "vanjs-core";
+import type { BoardBuilderRenderer } from "../board/builderRenderer";
 import { ICONS } from "./icons";
 import { loginPanel } from "./loginPanel";
 import { singlePlayerSettings } from "./singlePlayerSettings";
@@ -11,21 +12,19 @@ enum GameMode {
   Ranked,
 }
 
-export function configPanel(loggedIn: State<boolean>) {
-  const mode = van.state<GameMode>(GameMode.Ranked);
+export function configPanel(
+  loggedIn: State<boolean>,
+  board: BoardBuilderRenderer,
+) {
+  const mode = van.state<GameMode>(GameMode.SinglePlayer);
 
   const tab = {
-    class: "flex-1 flex items-center justify-center not-last:border-r",
+    class: "flex-1 flex items-center justify-center not-last:border-r border-b",
   };
-  const disabledTab = {
-    class: `${tab.class} bg-slate-800 text-gray-400 border-b`,
-  };
-  const activeTab = { class: `${tab.class}` };
-  const inactiveTab = {
-    class: `${tab.class} bg-slate-700 cursor-pointer border-b`,
-  };
+  const activeTab = { class: `${tab.class} border-b-transparent` };
+  const inactiveTab = { class: `${tab.class} bg-slate-700 cursor-pointer` };
 
-  const panel = { class: "flex-15 w-full p-2" };
+  const panel = { class: "flex-15 w-full p-5" };
   const shownPanel = { class: `${panel.class}` };
   const hiddenPanel = { class: `${panel.class} hidden` };
 
@@ -44,7 +43,7 @@ export function configPanel(loggedIn: State<boolean>) {
               : inactiveTab.class,
           onclick: () => (mode.val = GameMode.SinglePlayer),
         },
-        div({ class: "w-5" }, ICONS.USER),
+        div({ class: "w-9" }, ICONS.USER),
       ),
       button(
         {
@@ -54,7 +53,7 @@ export function configPanel(loggedIn: State<boolean>) {
               : inactiveTab.class,
           onclick: () => (mode.val = GameMode.Multiplayer),
         },
-        div({ class: "w-5" }, ICONS.USER_GROUP),
+        div({ class: "w-9" }, ICONS.USER_GROUP),
       ),
       button(
         {
@@ -62,7 +61,7 @@ export function configPanel(loggedIn: State<boolean>) {
             mode.val === GameMode.Ranked ? activeTab.class : inactiveTab.class,
           onclick: () => (mode.val = GameMode.Ranked),
         },
-        div({ class: "w-5" }, ICONS.TROPHY),
+        div({ class: "w-9" }, ICONS.TROPHY),
       ),
     ),
     div(
@@ -72,7 +71,7 @@ export function configPanel(loggedIn: State<boolean>) {
             ? shownPanel.class
             : hiddenPanel.class,
       },
-      singlePlayerSettings(),
+      singlePlayerSettings(board),
     ),
     div(
       {
