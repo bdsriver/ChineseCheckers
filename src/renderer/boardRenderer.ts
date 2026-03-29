@@ -1,4 +1,4 @@
-import { type Board, EMPTY_CELL } from "../board";
+import type { Board } from "../board";
 import { BOARD_MACROS } from "../board/macros";
 import {
   type BoardRendererConstants,
@@ -52,7 +52,7 @@ export class BoardRenderer {
   private onMouseDown() {
     if (
       this.hoveredPieceIndex !== undefined &&
-      this.board.state[this.hoveredPieceIndex] !== EMPTY_CELL
+      this.board.state[this.hoveredPieceIndex] === this.board.currentTurn()
     ) {
       this.activePieceIndex = this.hoveredPieceIndex;
     }
@@ -102,7 +102,7 @@ export class BoardRenderer {
       this.ctx.canvas.style.cursor = "grabbing";
     } else if (
       this.hoveredPieceIndex !== undefined &&
-      this.board.state[this.hoveredPieceIndex] !== EMPTY_CELL
+      this.board.state[this.hoveredPieceIndex] === this.board.currentTurn()
     ) {
       this.ctx.canvas.style.cursor = "grab";
     } else {
@@ -122,7 +122,7 @@ export class BoardRenderer {
       targetPieceIndex = this.activePieceIndex;
     } else if (
       this.hoveredPieceIndex !== undefined &&
-      this.board.state[this.hoveredPieceIndex] !== EMPTY_CELL
+      this.board.state[this.hoveredPieceIndex] === this.board.currentTurn()
     ) {
       targetPieceIndex = this.hoveredPieceIndex;
     }

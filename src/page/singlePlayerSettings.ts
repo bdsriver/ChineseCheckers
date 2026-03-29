@@ -1,10 +1,7 @@
 import van from "vanjs-core";
 import type { BoardPosition } from "../board/builder";
+import { INITIAL_PLAYERS, type PlayerCount } from "../board/builder";
 import { buildRenderer, type Renderer } from "../renderer";
-import {
-  INITIAL_PLAYERS,
-  type PlayerCount,
-} from "../renderer/boardBuilderRenderer";
 import { ICONS } from "./icons";
 
 const { div, input, label, button } = van.tags;

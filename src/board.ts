@@ -1,3 +1,4 @@
+import { INITIAL_PLAYERS, type PlayerCount } from "./board/builder";
 import { BOARD_MACROS } from "./board/macros";
 import type { Engine } from "./engine";
 
@@ -7,9 +8,13 @@ export const EMPTY_CELL = 6;
 export class Board {
   private engine: Engine;
   state: number[];
+  private turn: number;
+  private playerCount: PlayerCount;
 
-  constructor(engine: Engine, state: number[]) {
+  constructor(engine: Engine, state: number[], playerCount: PlayerCount) {
     this.engine = engine;
+    this.turn = 0;
+    this.playerCount = playerCount;
     this.state = state;
   }
 
@@ -55,10 +60,15 @@ export class Board {
     return moves;
   }
 
+  currentTurn() {
+    return INITIAL_PLAYERS[this.playerCount][this.turn];
+  }
+
   playerMove(from: number, to: number) {
     this.state[to] = this.state[from];
     this.state[from] = EMPTY_CELL;
     this.engine.move(from, to);
+    this.turn = (this.turn + 1) % this.playerCount;
   }
 
   botMove() {
@@ -69,6 +79,7 @@ export class Board {
     this.state[to] = this.state[from];
     this.state[from] = EMPTY_CELL;
     this.engine.move(from, to);
+    this.turn = (this.turn + 1) % this.playerCount;
   }
 
   destructor() {
