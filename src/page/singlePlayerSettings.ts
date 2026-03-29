@@ -7,23 +7,25 @@ import {
 } from "../board/builderRenderer";
 import { ICONS } from "./icons";
 
-const { div, input, label, button, select, option } = van.tags;
+const { div, input, label, button } = van.tags;
 
 export function singlePlayerSettings(board: BoardBuilderRenderer) {
   const playerCount = van.state<PlayerCount>(2);
+  const boardPosition = van.state<BoardPosition>(0);
   board.setPlayers(playerCount.val);
 
   return div(
     { class: "flex flex-col items-center justify-center gap-4" },
     div(
       { class: "flex-1 flex flex-row items-center justify-center gap-2" },
-      label("Players"),
+      label("Player Count"),
       div(
         {
           class: "join",
           onchange: (e) => {
             const count = parseInt(e.target.value, 10) as PlayerCount;
             playerCount.val = count;
+            boardPosition.val = INITIAL_PLAYERS[count][0];
             board.setPlayers(count);
           },
         },
@@ -39,32 +41,32 @@ export function singlePlayerSettings(board: BoardBuilderRenderer) {
         ),
       ),
     ),
-    ...Array(6)
-      .fill(0)
-      .map((_, player) => {
-        return div(
-          { class: "flex flex-row gap-1 items-center" },
-          div({ class: "w-20" }, ICONS.PLAYER_POSITION_INDICATORS[player]),
-          () =>
-            select(
-              {
-                disabled: !INITIAL_PLAYERS[playerCount.val].includes(
-                  player as BoardPosition,
-                ),
-                class: "select",
-                onchange: (e) => console.log(e.target.value),
-              },
-              option(
+    div(
+      { class: "flex-1 flex flex-row items-center justify-center gap-2" },
+      label("Your Pieces"),
+      div(
+        {
+          class: "join flex flex-row",
+        },
+        ...ICONS.PLAYER_POSITION_INDICATORS.map((icon, position) =>
+          button(
+            {
+              class: () =>
+                "btn btn-square" +
+                (position === boardPosition.val ? " btn-primary" : ""),
+              disabled: () =>
                 !INITIAL_PLAYERS[playerCount.val].includes(
-                  player as BoardPosition,
-                )
-                  ? ""
-                  : "Bot",
-              ),
-              option("You"),
-            ),
-        );
-      }),
+                  position as BoardPosition,
+                ),
+              onclick: () => {
+                boardPosition.val = position as BoardPosition;
+              },
+            },
+            icon,
+          ),
+        ),
+      ),
+    ),
     button(
       { type: "submit", class: "btn", onclick: () => void board.build() },
       "Start Game",
