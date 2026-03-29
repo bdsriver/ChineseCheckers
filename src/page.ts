@@ -1,14 +1,11 @@
 import van from "vanjs-core";
-import type { BoardBuilderRenderer } from "./board/builderRenderer";
 import { configPanel } from "./page/configPanel";
+import type { Renderer } from "./renderer";
 
 const { div } = van.tags;
 
-export function page(board: BoardBuilderRenderer) {
+export function page(renderer: Renderer) {
   const loggedIn = van.state(false);
 
-  return div(
-    { class: "w-full h-full relative text-red-100" },
-    configPanel(loggedIn, board),
-  );
+  return div(configPanel(loggedIn, renderer));
 }

@@ -1,17 +1,18 @@
 import { type Board, EMPTY_CELL } from "../board";
-import type { Vector2d } from "../vector";
-import { BOARD_MACROS } from "./macros";
+import { BOARD_MACROS } from "../board/macros";
 import {
   type BoardRendererConstants,
   computeConstants,
-} from "./renderer/constants";
-import { drawBoardState, drawPiece } from "./renderer/drawFunctions";
-import { screenToCanvasSpace, withinCircle } from "./renderer/mouseFunctions";
+} from "../renderer/constants";
+import { drawBoardState, drawPiece } from "../renderer/drawFunctions";
+import { screenToCanvasSpace, withinCircle } from "../renderer/mouseFunctions";
+import type { Vector2d } from "../vector";
 
 /** Adds some padding to the hover radius of board positions */
 const HOVER_MULTIPLIER = 11 / 8;
 
 export class BoardRenderer {
+  built = true;
   private ctx: CanvasRenderingContext2D;
   private hoveredPieceIndex: number | undefined;
   private activePieceIndex: number | undefined;

@@ -1,5 +1,5 @@
 import { Board, EMPTY_CELL } from "../board";
-import type { Engine } from "../engine";
+import { newEngine } from "../engine";
 import { BOARD_MACROS } from "./macros";
 
 /** Initial start position around the board */
@@ -31,17 +31,7 @@ export class BoardBuilder {
   }
 
   async build() {
-    // new Engine(this.included.size);
-    const engine: Engine = {
-      search: (d: number) => {
-        return [];
-      },
-      move: (f: number, t: number) => {
-        return 1;
-      },
-      delete: () => {},
-    };
-
+    const engine = await newEngine(this.included.size);
     return new Board(engine, this.state);
   }
 }

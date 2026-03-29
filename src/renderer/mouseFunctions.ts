@@ -1,4 +1,4 @@
-import type { Vector2d } from "../../vector";
+import type { Vector2d } from "../vector";
 
 export function screenToCanvasSpace(
   ctx: CanvasRenderingContext2D,

@@ -1,7 +1,7 @@
 import van from "vanjs-core";
-import { BoardBuilderRenderer } from "./board/builderRenderer";
 import "./index.css";
 import { page } from "./page";
+import { newRenderer } from "./renderer";
 
 async function main() {
   const canvas = document.getElementById(
@@ -15,8 +15,8 @@ async function main() {
     return;
   }
 
-  const boardBuilderRenderer = new BoardBuilderRenderer(ctx);
-  van.add(document.body, page(boardBuilderRenderer));
+  const renderer = newRenderer(ctx);
+  van.add(document.body, page(renderer));
 }
 
 void main();

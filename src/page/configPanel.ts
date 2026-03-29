@@ -1,5 +1,5 @@
 import van, { type State } from "vanjs-core";
-import type { BoardBuilderRenderer } from "../board/builderRenderer";
+import type { Renderer } from "../renderer";
 import { ICONS } from "./icons";
 import { loginPanel } from "./loginPanel";
 import { singlePlayerSettings } from "./singlePlayerSettings";
@@ -12,10 +12,7 @@ enum GameMode {
   Ranked,
 }
 
-export function configPanel(
-  loggedIn: State<boolean>,
-  board: BoardBuilderRenderer,
-) {
+export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
   const mode = van.state<GameMode>(GameMode.SinglePlayer);
 
   const tab = {
@@ -31,7 +28,7 @@ export function configPanel(
   return div(
     {
       class:
-        "absolute w-1/5 h-full border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
+        "absolute top-0 left-0 w-1/5 h-svh border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
     },
     div(
       { class: "flex-1 w-full flex flex-row" },
@@ -71,7 +68,7 @@ export function configPanel(
             ? shownPanel.class
             : hiddenPanel.class,
       },
-      singlePlayerSettings(board),
+      singlePlayerSettings(renderer),
     ),
     div(
       {

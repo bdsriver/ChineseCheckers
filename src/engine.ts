@@ -1,3 +1,5 @@
+import createModule from "./engine/engine";
+
 export interface Engine {
   /** Returns [from, to, ...path] */
   search: (depth: number) => number[];
@@ -7,3 +9,8 @@ export interface Engine {
   delete: () => void;
 }
 
+export async function newEngine(playerCount: number): Promise<Engine> {
+  const Module = await createModule();
+  // @ts-expect-error Module typing issues
+  return new Module.Engine(playerCount)as Engine;
+}

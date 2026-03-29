@@ -1,18 +1,20 @@
 import van from "vanjs-core";
 import type { BoardPosition } from "../board/builder";
+import { buildRenderer, type Renderer } from "../renderer";
 import {
-  type BoardBuilderRenderer,
   INITIAL_PLAYERS,
   type PlayerCount,
-} from "../board/builderRenderer";
+} from "../renderer/boardBuilderRenderer";
 import { ICONS } from "./icons";
 
 const { div, input, label, button } = van.tags;
 
-export function singlePlayerSettings(board: BoardBuilderRenderer) {
+export function singlePlayerSettings(renderer: Renderer) {
   const playerCount = van.state<PlayerCount>(2);
   const boardPosition = van.state<BoardPosition>(0);
-  board.setPlayers(playerCount.val);
+  if (!renderer.built) {
+    renderer.board.setPlayers(playerCount.val);
+  }
 
   return div(
     { class: "flex flex-col items-center justify-center gap-4" },
@@ -23,10 +25,12 @@ export function singlePlayerSettings(board: BoardBuilderRenderer) {
         {
           class: "join",
           onchange: (e) => {
-            const count = parseInt(e.target.value, 10) as PlayerCount;
-            playerCount.val = count;
-            boardPosition.val = INITIAL_PLAYERS[count][0];
-            board.setPlayers(count);
+            if (!renderer.built) {
+              const count = parseInt(e.target.value, 10) as PlayerCount;
+              playerCount.val = count;
+              boardPosition.val = INITIAL_PLAYERS[count][0];
+              renderer.board.setPlayers(count);
+            }
           },
         },
         ...[2, 3, 4, 6].map((count) =>
@@ -68,7 +72,13 @@ export function singlePlayerSettings(board: BoardBuilderRenderer) {
       ),
     ),
     button(
-      { type: "submit", class: "btn", onclick: () => void board.build() },
+      {
+        type: "submit",
+        class: "btn",
+        onclick: () => {
+          void buildRenderer(renderer);
+        },
+      },
       "Start Game",
     ),
   );

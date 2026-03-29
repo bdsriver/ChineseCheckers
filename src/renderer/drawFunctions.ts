@@ -1,6 +1,6 @@
 import Color from "colorjs.io";
-import { EMPTY_CELL } from "../../board";
-import type { Vector2d } from "../../vector";
+import { EMPTY_CELL } from "../board";
+import type { Vector2d } from "../vector";
 import type { BoardRendererConstants } from "./constants";
 
 const SQRT_2 = 2 ** 0.5;

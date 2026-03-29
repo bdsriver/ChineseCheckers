@@ -1,5 +1,5 @@
-import type { Vector2d } from "../../vector";
-import { BOARD_MACROS } from "../macros";
+import { BOARD_MACROS } from "../board/macros";
+import type { Vector2d } from "../vector";
 
 /** Diameter of board, in screen pixels */
 const BOARD_DIAMETER_PIXELS = 540;
