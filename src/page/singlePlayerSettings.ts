@@ -83,5 +83,17 @@ export function singlePlayerSettings(renderer: Renderer) {
       },
       "Start Game",
     ),
+    button(
+      {
+        type: "button",
+        class: "btn",
+        onclick: () => {
+          if (renderer.built) {
+            renderer.board.tempEngineMove();
+          }
+        },
+      },
+      "Engine Move",
+    ),
   );
 }

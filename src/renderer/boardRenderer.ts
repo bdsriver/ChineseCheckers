@@ -44,6 +44,12 @@ export class BoardRenderer {
     this.safeRender();
   }
 
+  /** Temporary function until architecture done */
+  tempEngineMove() {
+    this.board.botMove();
+    this.safeRender();
+  }
+
   private onMouseMove() {
     this.computeHoveredPiece();
     this.safeRender();
