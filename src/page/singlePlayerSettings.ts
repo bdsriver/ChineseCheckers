@@ -9,6 +9,8 @@ const { div, input, label, button } = van.tags;
 export function singlePlayerSettings(renderer: Renderer) {
   const playerCount = van.state<PlayerCount>(2);
   const boardPosition = van.state<BoardPosition>(0);
+  const gameStarted = van.state(false);
+
   if (!renderer.built) {
     renderer.board.setPlayers(playerCount.val);
   }
@@ -38,6 +40,7 @@ export function singlePlayerSettings(renderer: Renderer) {
             ariaLabel: count,
             value: count,
             ...(count === playerCount.val && { checked: "checked" }),
+            disabled: () => gameStarted.val,
           }),
         ),
       ),
@@ -58,7 +61,7 @@ export function singlePlayerSettings(renderer: Renderer) {
               disabled: () =>
                 !INITIAL_PLAYERS[playerCount.val].includes(
                   position as BoardPosition,
-                ),
+                ) || gameStarted.val,
               onclick: () => {
                 boardPosition.val = position as BoardPosition;
               },
@@ -72,8 +75,10 @@ export function singlePlayerSettings(renderer: Renderer) {
       {
         type: "submit",
         class: "btn",
+        disabled: () => gameStarted.val,
         onclick: () => {
           void buildRenderer(renderer);
+          gameStarted.val = true;
         },
       },
       "Start Game",
