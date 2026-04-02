@@ -5,7 +5,7 @@ import type { BoardRendererConstants } from "./constants";
 
 const SQRT_2 = 2 ** 0.5;
 
-const PLAYER_COLORS = [
+export const PLAYER_COLORS = [
   new Color("#9b0606"),
   new Color("#026d10"),
   new Color("#aaacaf"),

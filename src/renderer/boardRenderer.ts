@@ -1,10 +1,15 @@
+import Color from "colorjs.io";
 import type { Board } from "../board";
 import { BOARD_MACROS } from "../board/macros";
 import {
   type BoardRendererConstants,
   computeConstants,
 } from "../renderer/constants";
-import { drawBoardState, drawPiece } from "../renderer/drawFunctions";
+import {
+  drawBoardState,
+  drawCircle,
+  drawPiece,
+} from "../renderer/drawFunctions";
 import { screenToCanvasSpace, withinCircle } from "../renderer/mouseFunctions";
 import type { Vector2d } from "../vector";
 
@@ -198,6 +203,18 @@ export class BoardRenderer {
           1,
         );
       }
+    }
+
+    /** Render current path */
+    for (const cell of this.board.currentPath) {
+      drawCircle(
+        this.ctx,
+        new Color("#ffffff"),
+        undefined,
+        this.constants.PIECE_POSITIONS[cell],
+        this.constants.PIECE_RADIUS_CANVAS / 2,
+        0,
+      );
     }
   }
 }
