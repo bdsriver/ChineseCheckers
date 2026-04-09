@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chinese Checkers</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <script type="module" src="/src/index.ts"></script>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+  <body class="bg-stone-800 flex items-center justify-center m-0 h-dvh w-dvw">
+    <canvas width="2000" height="2000" id="main-canvas" class="fixed w-full"></canvas>
+    <button id="start-button" type="button" class="absolute top-1/2 left-1/2"></button>
   </body>
 </html>
