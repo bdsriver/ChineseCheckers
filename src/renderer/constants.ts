@@ -2,7 +2,7 @@ import { BOARD_MACROS } from "../board/macros";
 import type { Vector2d } from "../vector";
 
 /** Diameter of board, in screen pixels */
-const BOARD_DIAMETER_PIXELS = 540;
+const BOARD_DIAMETER_PIXELS = 740;
 /** Diameter of piece, in percent of board diameter */
 const PIECE_DIAMETER_PERCENTAGE = 5 / 128;
 /** Radius of board holes, in percent of piece radius */
