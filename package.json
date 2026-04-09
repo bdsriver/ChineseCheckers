@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --clearScreen false",
-    "build": "vite build"
+    "build": "vite build --base=./"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
