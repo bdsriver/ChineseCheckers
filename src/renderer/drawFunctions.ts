@@ -14,9 +14,34 @@ const PLAYER_COLORS = [
 const BOARD_COLOR = new Color("#edb878");
 const HOLE_COLOR = new Color("#a07d51");
 
+export function drawTriangle(
+  ctx: CanvasRenderingContext2D,
+  fill: Color | undefined,
+  stroke: Color | undefined,
+  p1: Vector2d,
+  p2: Vector2d,
+  p3: Vector2d,
+) {
+  ctx.moveTo(p1.x, p1.y);
+  ctx.beginPath();
+  ctx.lineTo(p2.x, p2.y);
+  ctx.lineTo(p3.x, p3.y);
+  ctx.lineTo(p1.x, p1.y);
+
+  if (fill !== undefined) {
+    ctx.fillStyle = fill.to("srgb").toString();
+    ctx.fill();
+  }
+
+  if (stroke !== undefined) {
+    ctx.strokeStyle = stroke.to("srgb").toString();
+    ctx.stroke();
+  }
+}
+
 export function drawCircle(
   ctx: CanvasRenderingContext2D,
-  fill: Color,
+  fill: Color | undefined,
   stroke: Color | undefined,
   position: Vector2d,
   radius: number,
@@ -25,13 +50,18 @@ export function drawCircle(
   ctx.moveTo(position.x, position.y);
   ctx.beginPath();
   ctx.arc(position.x, position.y, radius, 0, 360);
-  ctx.fillStyle = fill.to("srgb").toString();
+
   if (blur !== undefined) {
     ctx.filter = `blur(${blur}px)`;
   } else {
     ctx.filter = "blur(0px)";
   }
-  ctx.fill();
+
+  if (fill !== undefined) {
+    ctx.fillStyle = fill.to("srgb").toString();
+    ctx.fill();
+  }
+
   if (stroke !== undefined) {
     ctx.strokeStyle = stroke.to("srgb").toString();
     ctx.stroke();
@@ -66,7 +96,7 @@ export function drawPiece(
   const LIGHT_L3 = 0.15;
   const multiplier = 0.7;
   const radiusMultiplier =
-    (multiplier * constants.PIECE_RADIUS_CANVAS) / (2 ** 0.5);
+    (multiplier * constants.PIECE_RADIUS_CANVAS) / 2 ** 0.5;
 
   const localFill = PLAYER_COLORS[playerIndex].clone();
   const localStroke = new Color("black");
@@ -128,6 +158,26 @@ export function drawBoardState(
     0,
   );
 
+  const startCorners = [
+    [120, 114, 111],
+    [98, 101, 65],
+    [10, 46, 13],
+    [0, 6, 9],
+    [22, 19, 55],
+    [110, 74, 107],
+  ];
+
+  for (let i = 0; i < 6; i++) {
+    drawTriangle(
+      ctx,
+      PLAYER_COLORS[(i + 3) % 6],
+      undefined,
+      constants.PIECE_POSITIONS[startCorners[i][0]],
+      constants.PIECE_POSITIONS[startCorners[i][1]],
+      constants.PIECE_POSITIONS[startCorners[i][2]],
+    );
+  }
+
   /** Render empty spots */
   for (let i = 0; i < state.length; i++) {
     if (state[i] === EMPTY_CELL) {
@@ -144,5 +194,21 @@ export function drawBoardState(
         drawHole(ctx, constants, constants.PIECE_POSITIONS[i]);
       }
     }
+  }
+}
+
+export function drawDebugBoard(
+  ctx: CanvasRenderingContext2D,
+  constants: BoardRendererConstants,
+) {
+  // Draw indices at board positions
+  ctx.font = "12px serif";
+  ctx.fillStyle = "black";
+  for (let i = 0; i < constants.PIECE_POSITIONS.length; i++) {
+    ctx.fillText(
+      i.toString(),
+      constants.PIECE_POSITIONS[i].x,
+      constants.PIECE_POSITIONS[i].y,
+    );
   }
 }

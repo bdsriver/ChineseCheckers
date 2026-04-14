@@ -6,7 +6,7 @@ const BOARD_DIAMETER_PIXELS = 2 / 3;
 /** Diameter of piece, in percent of board diameter */
 const PIECE_DIAMETER_PERCENTAGE = 5 / 128;
 /** Radius of board holes, in percent of piece radius */
-const HOLE_RADIUS_PERCENT = 3 / 4;
+const HOLE_RADIUS_PERCENT = 4/5;
 
 export interface BoardRendererConstants {
   BOARD_DIAMETER_CANVAS: number;

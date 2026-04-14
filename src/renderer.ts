@@ -2,6 +2,7 @@ import Color from "colorjs.io";
 import type { Board } from "./board";
 import type { BoardBuilder } from "./board/builder";
 import { BOARD_MACROS } from "./board/macros";
+import { DEBUG } from "./constants";
 import {
   type BoardRendererConstants,
   computeConstants,
@@ -9,6 +10,7 @@ import {
 import {
   drawBoardState,
   drawCircle,
+  drawDebugBoard,
   drawPiece,
 } from "./renderer/drawFunctions";
 import { screenToCanvasSpace, withinCircle } from "./renderer/mouseFunctions";
@@ -73,6 +75,10 @@ export class Renderer {
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
       drawBoardState(this.ctx, this.constants, board.state, this.activePiece);
+
+      if (DEBUG) {
+        drawDebugBoard(this.ctx, this.constants);
+      }
     });
   }
 
@@ -191,6 +197,10 @@ export class Renderer {
         this.constants.PIECE_RADIUS_CANVAS / 2,
         0,
       );
+
+      if (DEBUG) {
+        drawDebugBoard(this.ctx, this.constants);
+      }
     });
   }
 }
