@@ -1,23 +1,19 @@
 import van from "vanjs-core";
 import type { BoardPosition } from "../board/builder";
 import { INITIAL_PLAYERS, type PlayerCount } from "../board/builder";
-import { buildRenderer, type Renderer } from "../renderer";
+import type { ApplicationState } from "../state";
 import { ICONS } from "./icons";
 
 const { div, input, label, button } = van.tags;
 
-export function singlePlayerSettings(renderer: Renderer) {
-  const playerCount = van.state<PlayerCount>(2);
+export function singlePlayerSettings(state: ApplicationState) {
+  const gameStarted = van.state<boolean>(false);
+  const playerCount = van.state<PlayerCount>(state.playerCount);
   const boardPosition = van.state<BoardPosition>(0);
-  const gameStarted = van.state(false);
 
   const style = {
     field: "flex-1 flex flex-row items-center justify-center w-full",
   };
-
-  if (!renderer.built) {
-    renderer.board.setPlayers(playerCount.val);
-  }
 
   return div(
     { class: "flex flex-col items-center justify-start h-full gap-4" },
@@ -28,12 +24,10 @@ export function singlePlayerSettings(renderer: Renderer) {
         {
           class: "join flex-1",
           onchange: (e) => {
-            if (!renderer.built) {
-              const count = parseInt(e.target.value, 10) as PlayerCount;
-              playerCount.val = count;
-              boardPosition.val = INITIAL_PLAYERS[count][0];
-              renderer.board.setPlayers(count);
-            }
+            const count = parseInt(e.target.value, 10) as PlayerCount;
+            state.setPlayerCount(count);
+            boardPosition.val = INITIAL_PLAYERS[count][0];
+            playerCount.val = count;
           },
         },
         ...[2, 3, 4, 6].map((count) =>
@@ -51,7 +45,7 @@ export function singlePlayerSettings(renderer: Renderer) {
     ),
     div(
       { class: style.field },
-      label({class: "flex-1"},"Your Pieces"),
+      label({ class: "flex-1" }, "Your Pieces"),
       div(
         {
           class: "join flex-1 flex flex-row",
@@ -83,26 +77,11 @@ export function singlePlayerSettings(renderer: Renderer) {
           class: "btn",
           disabled: () => gameStarted.val,
           onclick: () => {
-            void buildRenderer(renderer);
             gameStarted.val = true;
+            void state.startGame();
           },
         },
         "Start Game",
-      ),
-    ),
-    div(
-      { class: style.field },
-      button(
-        {
-          type: "button",
-          class: "btn",
-          onclick: () => {
-            if (renderer.built) {
-              renderer.board.tempEngineMove();
-            }
-          },
-        },
-        "Engine Move",
       ),
     ),
     div({ class: "flex-3/4" }),

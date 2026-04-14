@@ -1,7 +1,7 @@
 import van from "vanjs-core";
 import "./index.css";
 import { page } from "./page";
-import { newRenderer } from "./renderer";
+import { ApplicationState } from "./state";
 
 async function main() {
   const canvas = document.getElementById(
@@ -15,14 +15,18 @@ async function main() {
     return;
   }
 
+  // Reset canvas resolution (must be done first)
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   canvas.width = rect.width * dpr;
   canvas.height = rect.height * dpr;
   canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const renderer = newRenderer(ctx);
-  van.add(document.body.children[0], page(renderer));
+  // Initialize app state
+  const appState = new ApplicationState(ctx);
+
+  // Render page
+  van.add(document.body.children[0], page(appState));
 }
 
 void main();

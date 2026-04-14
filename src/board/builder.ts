@@ -17,18 +17,27 @@ export const INITIAL_PLAYERS: Record<PlayerCount, BoardPosition[]> = {
 export type BoardPosition = 0 | 1 | 2 | 3 | 4 | 5;
 
 export class BoardBuilder {
-  state: number[];
-  private included: Set<BoardPosition>;
-  private playerCount: PlayerCount;
+  private _state: number[];
+  private _included: Set<BoardPosition>;
+  private _playerCount: PlayerCount;
 
   constructor() {
-    this.state = Array<number>(BOARD_MACROS.positions.length).fill(EMPTY_CELL);
-    this.included = new Set();
-    this.playerCount = 2;
+    this._state = Array<number>(BOARD_MACROS.positions.length).fill(EMPTY_CELL);
+    this._included = new Set();
+    this._playerCount = 2;
+    this.setPlayerCount(this._playerCount);
+  }
+
+  get playerCount() {
+    return this._playerCount;
+  }
+
+  get state() {
+    return this._state;
   }
 
   setPlayerCount(count: PlayerCount) {
-    this.playerCount = count;
+    this._playerCount = count;
 
     for (let i = 0; i < 6; i++) {
       this.removePlayer(i as BoardPosition);
@@ -40,23 +49,23 @@ export class BoardBuilder {
   }
 
   private setPlayer(position: BoardPosition) {
-    this.included.add(position);
+    this._included.add(position);
 
     for (const index of BOARD_MACROS.starts[position]) {
-      this.state[index] = position;
+      this._state[index] = position;
     }
   }
 
   private removePlayer(position: BoardPosition) {
-    this.included.delete(position);
+    this._included.delete(position);
 
     for (const index of BOARD_MACROS.starts[position]) {
-      this.state[index] = EMPTY_CELL;
+      this._state[index] = EMPTY_CELL;
     }
   }
 
   async build() {
-    const engine = await newEngine(this.playerCount);
-    return new Board(engine, this.state, this.playerCount);
+    const engine = await newEngine(this._playerCount);
+    return new Board(engine, this._state, this._playerCount);
   }
 }
