@@ -1,6 +1,6 @@
 import { INITIAL_PLAYERS, type PlayerCount } from "./board/builder";
+import type { Engine } from "./board/engine";
 import { BOARD_MACROS } from "./board/macros";
-import type { Engine } from "./engine";
 
 export const EMPTY_CELL = 6;
 const BOT_DEPTH = 3;

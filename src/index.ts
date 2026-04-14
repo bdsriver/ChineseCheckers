@@ -1,7 +1,7 @@
 import van from "vanjs-core";
+import { ApplicationState } from "./application/state";
 import "./index.css";
 import { page } from "./page";
-import { ApplicationState } from "./state";
 
 async function main() {
   const canvas = document.getElementById(

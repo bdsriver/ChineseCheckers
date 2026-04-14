@@ -1,5 +1,5 @@
 import { Board, EMPTY_CELL } from "../board";
-import { newEngine } from "../engine";
+import { newEngine } from "./engine";
 import { BOARD_MACROS } from "./macros";
 
 /** Amount of players starting on the board */
@@ -34,6 +34,10 @@ export class BoardBuilder {
 
   get state() {
     return this._state;
+  }
+
+  get initialPositions() {
+    return INITIAL_PLAYERS[this._playerCount];
   }
 
   setPlayerCount(count: PlayerCount) {

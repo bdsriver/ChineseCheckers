@@ -1,6 +1,6 @@
 import van from "vanjs-core";
 import { configPanel } from "./page/configPanel";
-import type { ApplicationState } from "./state";
+import type { ApplicationState } from "./application/state";
 
 const { div } = van.tags;
 

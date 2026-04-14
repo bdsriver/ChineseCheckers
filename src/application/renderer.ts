@@ -1,8 +1,8 @@
 import Color from "colorjs.io";
+import { DEBUG } from "../constants";
 import type { Board } from "./board";
 import type { BoardBuilder } from "./board/builder";
 import { BOARD_MACROS } from "./board/macros";
-import { DEBUG } from "./constants";
 import {
   type BoardRendererConstants,
   computeConstants,

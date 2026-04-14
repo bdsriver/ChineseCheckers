@@ -1,5 +1,5 @@
 import van from "vanjs-core";
-import type { ApplicationState } from "../state";
+import type { ApplicationState } from "../application/state";
 import { ICONS } from "./icons";
 import { loginPanel } from "./loginPanel";
 import { singlePlayerSettings } from "./singlePlayerSettings";
