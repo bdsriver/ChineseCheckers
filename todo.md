@@ -11,17 +11,19 @@ Maybe remove colors, instead for each position have dropdown of which player is 
 Apache server + web sockets
 
 # Meeting Notes
-- should we only preview immediate jumps or all possible jumps?  should we have click and drag or confirm?
+- should we only preview immediate jumps or all possible jumps?
   - previous only previewed, but can skip, make intermediate moves, can reset or confirm, click from move to move with selection state
-  - preview all moves option (default false)
 - list of positions for each player (described in api.md)
 - replace opt out with data collection notice
-- could rotate board on ui to have bottom be your pieces
-  - could have option for it (default false)
-- how is engine going
-  - noticing issue with hardcoding start position turns and positions for each player count
-  - just follow what engine says for default positions/turns
-- how should previous moves be displayed?
-  - make white less bright
-  - maybe just preview start and end position
-- should we have a tutorial page? what should go on there?
+- just follow what engine says for default positions/turns
+
+# TODO
+- tutorial page
+- option for preview all jumps, default false
+- change click and drag to click selection and confirm
+  - also need confirm move or reset move
+- replace opt out with data collection notice
+- replace white dot with something better for previous moves
+  - instead of displaying trail, just display start and end
+- api implementation
+- abstract local and server api
