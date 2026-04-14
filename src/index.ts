@@ -10,13 +10,19 @@ async function main() {
 
   const ctx = canvas?.getContext("2d");
 
-  if (!ctx) {
+  if (!canvas || !ctx) {
     alert("Unsupported browser configuration: Could not get Canvas2D context");
     return;
   }
 
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   const renderer = newRenderer(ctx);
-  van.add(document.body, page(renderer));
+  van.add(document.body.children[0], page(renderer));
 }
 
 void main();

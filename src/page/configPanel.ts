@@ -28,7 +28,7 @@ export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
   return div(
     {
       class:
-        "absolute top-0 left-0 w-1/5 h-svh border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
+        "absolute top-0 left-0 w-100 h-full border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
     },
     div(
       { class: "flex-1 w-full flex flex-row" },

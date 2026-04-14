@@ -1,8 +1,8 @@
 import { BOARD_MACROS } from "../board/macros";
 import type { Vector2d } from "../vector";
 
-/** Diameter of board, in screen pixels */
-const BOARD_DIAMETER_PIXELS = 740;
+/** Diameter of board, in percent screen height */
+const BOARD_DIAMETER_PIXELS = 2 / 3;
 /** Diameter of piece, in percent of board diameter */
 const PIECE_DIAMETER_PERCENTAGE = 5 / 128;
 /** Radius of board holes, in percent of piece radius */
@@ -19,7 +19,7 @@ export function computeConstants(
   ctx: CanvasRenderingContext2D,
 ): BoardRendererConstants {
   const BOARD_DIAMETER_CANVAS =
-    (BOARD_DIAMETER_PIXELS * ctx.canvas.height) / ctx.canvas.offsetHeight;
+    (BOARD_DIAMETER_PIXELS * document.body.offsetHeight * ctx.canvas.height) / ctx.canvas.offsetHeight;
 
   const PIECE_RADIUS_CANVAS =
     (BOARD_DIAMETER_CANVAS * PIECE_DIAMETER_PERCENTAGE) / 2;

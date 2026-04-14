@@ -11,18 +11,22 @@ export function singlePlayerSettings(renderer: Renderer) {
   const boardPosition = van.state<BoardPosition>(0);
   const gameStarted = van.state(false);
 
+  const style = {
+    field: "flex-1 flex flex-row items-center justify-center w-full",
+  };
+
   if (!renderer.built) {
     renderer.board.setPlayers(playerCount.val);
   }
 
   return div(
-    { class: "flex flex-col items-center justify-center gap-4" },
+    { class: "flex flex-col items-center justify-start h-full gap-4" },
     div(
-      { class: "flex-1 flex flex-row items-center justify-center gap-2" },
-      label("Player Count"),
+      { class: style.field },
+      label({ class: "flex-1" }, "Player Count"),
       div(
         {
-          class: "join",
+          class: "join flex-1",
           onchange: (e) => {
             if (!renderer.built) {
               const count = parseInt(e.target.value, 10) as PlayerCount;
@@ -46,11 +50,11 @@ export function singlePlayerSettings(renderer: Renderer) {
       ),
     ),
     div(
-      { class: "flex-1 flex flex-row items-center justify-center gap-2" },
-      label("Your Pieces"),
+      { class: style.field },
+      label({class: "flex-1"},"Your Pieces"),
       div(
         {
-          class: "join flex flex-row",
+          class: "join flex-1 flex flex-row",
         },
         ...ICONS.PLAYER_POSITION_INDICATORS.map((icon, position) =>
           button(
@@ -71,29 +75,36 @@ export function singlePlayerSettings(renderer: Renderer) {
         ),
       ),
     ),
-    button(
-      {
-        type: "submit",
-        class: "btn",
-        disabled: () => gameStarted.val,
-        onclick: () => {
-          void buildRenderer(renderer);
-          gameStarted.val = true;
+    div(
+      { class: style.field },
+      button(
+        {
+          type: "submit",
+          class: "btn",
+          disabled: () => gameStarted.val,
+          onclick: () => {
+            void buildRenderer(renderer);
+            gameStarted.val = true;
+          },
         },
-      },
-      "Start Game",
+        "Start Game",
+      ),
     ),
-    button(
-      {
-        type: "button",
-        class: "btn",
-        onclick: () => {
-          if (renderer.built) {
-            renderer.board.tempEngineMove();
-          }
+    div(
+      { class: style.field },
+      button(
+        {
+          type: "button",
+          class: "btn",
+          onclick: () => {
+            if (renderer.built) {
+              renderer.board.tempEngineMove();
+            }
+          },
         },
-      },
-      "Engine Move",
+        "Engine Move",
+      ),
     ),
+    div({ class: "flex-3/4" }),
   );
 }
