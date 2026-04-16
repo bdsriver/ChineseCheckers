@@ -43,6 +43,10 @@ export class Board {
     return INITIAL_PLAYERS[this._playerCount][this._lastTurn];
   }
 
+  get clientPiece() {
+    return 0;
+  }
+
   getAvailableMoves(index: number) {
     const moves = new Set<number>();
 
@@ -85,7 +89,7 @@ export class Board {
     return moves;
   }
 
-  movePlayer(from: number, to: number) {
+  makeMove(from: number, to: number) {
     this._currentPath = this.findPath(from, to);
     this._state[to] = this._state[from];
     this._state[from] = EMPTY_CELL;
