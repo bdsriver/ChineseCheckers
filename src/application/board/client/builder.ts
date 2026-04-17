@@ -1,30 +1,24 @@
-import { Board, EMPTY_CELL } from "../board";
+import { EMPTY_CELL } from "../../board";
+import {
+  type BoardPosition,
+  ClientBoard,
+  INITIAL_PLAYERS,
+  type PlayerCount,
+} from "../client";
+import { BOARD_MACROS } from "../macros";
 import { newEngine } from "./engine";
-import { BOARD_MACROS } from "./macros";
 
-/** Amount of players starting on the board */
-export type PlayerCount = 2 | 3 | 4 | 6;
-
-/** Initial start positions of each player count */
-export const INITIAL_PLAYERS: Record<PlayerCount, BoardPosition[]> = {
-  2: [0, 3],
-  3: [1, 3, 5],
-  4: [0, 1, 3, 4],
-  6: [0, 1, 2, 3, 4, 5],
-};
-
-/** Initial start position around the board */
-export type BoardPosition = 0 | 1 | 2 | 3 | 4 | 5;
-
-export class BoardBuilder {
+export class ClientBoardBuilder {
   private _state: number[];
   private _included: Set<BoardPosition>;
   private _playerCount: PlayerCount;
+  private _clientPosition: BoardPosition
 
   constructor() {
     this._state = Array<number>(BOARD_MACROS.positions.length).fill(EMPTY_CELL);
     this._included = new Set();
     this._playerCount = 2;
+    this._clientPosition = INITIAL_PLAYERS[this._playerCount][0];
     this.setPlayerCount(this._playerCount);
   }
 
@@ -52,6 +46,10 @@ export class BoardBuilder {
     }
   }
 
+  setClientPosition(position: BoardPosition) {
+    this._clientPosition = position;
+  }
+
   private setPlayer(position: BoardPosition) {
     this._included.add(position);
 
@@ -70,6 +68,6 @@ export class BoardBuilder {
 
   async build() {
     const engine = await newEngine(this._playerCount);
-    return new Board(engine, this._state, this._playerCount);
+    return new ClientBoard(engine, this._state, this._playerCount, this._clientPosition);
   }
 }

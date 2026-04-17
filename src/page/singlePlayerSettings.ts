@@ -1,9 +1,9 @@
 import van from "vanjs-core";
-import type { BoardPosition } from "../application/board/builder";
 import {
+  type BoardPosition,
   INITIAL_PLAYERS,
   type PlayerCount,
-} from "../application/board/builder";
+} from "../application/board/client";
 import type { ApplicationState } from "../application/state";
 import { ICONS } from "./icons";
 
@@ -65,6 +65,7 @@ export function singlePlayerSettings(state: ApplicationState) {
                 ) || gameStarted.val,
               onclick: () => {
                 boardPosition.val = position as BoardPosition;
+                state.setClientPosition(position as BoardPosition);
               },
             },
             icon,

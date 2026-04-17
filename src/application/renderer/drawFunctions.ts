@@ -4,12 +4,12 @@ import type { Vector2d } from "../vector";
 import type { BoardRendererConstants } from "./constants";
 
 const PLAYER_COLORS = [
-  new Color("#9b0606"),
-  new Color("#026d10"),
-  new Color("#aaacaf"),
   new Color("#aca408"),
   new Color("#2e3ef0"),
   new Color("#292e2a"),
+  new Color("#9b0606"),
+  new Color("#026d10"),
+  new Color("#aaacaf"),
 ] as const;
 const BOARD_COLOR = new Color("#edb878");
 const HOLE_COLOR = new Color("#a07d51");
@@ -159,12 +159,12 @@ export function drawBoardState(
   );
 
   const startCorners = [
-    [120, 114, 111],
-    [98, 101, 65],
-    [10, 46, 13],
     [0, 6, 9],
     [22, 19, 55],
     [110, 74, 107],
+    [120, 114, 111],
+    [98, 101, 65],
+    [10, 46, 13],
   ];
 
   for (let i = 0; i < 6; i++) {

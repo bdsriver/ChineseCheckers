@@ -1,11 +1,11 @@
 import Color from "colorjs.io";
 import { DEBUG } from "../constants";
-import { type Board } from "./board";
-import type { BoardBuilder } from "./board/builder";
+import type { ClientBoard } from "./board/client";
+import type { ClientBoardBuilder } from "./board/client/builder";
 import { BOARD_MACROS } from "./board/macros";
 import {
-  computeConstants,
   type BoardRendererConstants,
+  computeConstants,
 } from "./renderer/constants";
 import {
   drawBoardState,
@@ -58,22 +58,22 @@ export class Renderer {
     }
   }
 
-  onMouseDown(board: Board) {
-    if (this.hoveredPosition !== undefined) {
-      if (board.state[this.hoveredPosition] === board.clientPiece) {
+  onMouseDown(board: ClientBoard) {
+    if (this.hoveredPosition !== undefined && board.isClientsTurn) {
+      if (board.state[this.hoveredPosition] === board.clientPosition) {
         this.setSelectedPiece(this.hoveredPosition, board);
         this.heldPieceIndex = this.hoveredPosition;
       } else if (
         this.selectedPieceIndex !== undefined &&
         this.computedAvailableMoves.has(this.hoveredPosition)
       ) {
-        board.makeMove(this.selectedPieceIndex, this.hoveredPosition);
+        board.moveClient(this.selectedPieceIndex, this.hoveredPosition);
         this.setSelectedPiece(undefined, board);
       }
     }
   }
 
-  onMouseUp(board: Board) {
+  onMouseUp(board: ClientBoard) {
     if (
       this.hoveredPosition !== undefined &&
       this.heldPieceIndex !== undefined
@@ -82,7 +82,7 @@ export class Renderer {
         this.selectedPieceIndex !== undefined &&
         this.computedAvailableMoves.has(this.hoveredPosition)
       ) {
-        board.makeMove(this.selectedPieceIndex, this.hoveredPosition);
+        board.moveClient(this.selectedPieceIndex, this.hoveredPosition);
         this.setSelectedPiece(undefined, board);
       }
     }
@@ -90,7 +90,7 @@ export class Renderer {
     this.heldPieceIndex = undefined;
   }
 
-  private setSelectedPiece(index: number | undefined, board: Board) {
+  private setSelectedPiece(index: number | undefined, board: ClientBoard) {
     this.selectedPieceIndex = index;
     if (this.selectedPieceIndex !== undefined) {
       this.computedAvailableMoves = board.getAvailableMoves(
@@ -101,7 +101,7 @@ export class Renderer {
     }
   }
 
-  renderBuilder(board: BoardBuilder) {
+  renderBuilder(board: ClientBoardBuilder) {
     window.requestAnimationFrame(() => {
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
@@ -118,15 +118,22 @@ export class Renderer {
     });
   }
 
-  render(board: Board) {
+  render(board: ClientBoard) {
     window.requestAnimationFrame(() => {
       if (this.heldPieceIndex !== undefined) {
         this.ctx.canvas.style.cursor = "grabbing";
       } else if (
         this.hoveredPosition !== undefined &&
-        board.state[this.hoveredPosition] === board.clientPiece
+        board.state[this.hoveredPosition] === board.clientPosition &&
+        board.isClientsTurn
       ) {
         this.ctx.canvas.style.cursor = "grab";
+      } else if (
+        this.hoveredPosition !== undefined &&
+        this.computedAvailableMoves.has(this.hoveredPosition) &&
+        board.isClientsTurn
+      ) {
+        this.ctx.canvas.style.cursor = "pointer";
       } else {
         this.ctx.canvas.style.cursor = "default";
       }
@@ -141,12 +148,12 @@ export class Renderer {
       );
 
       /** Highlight just moved piece */
-      if (board.currentPath.length > 0) {
+      if (board.previousTurnMove.length > 0) {
         drawCircle(
           this.ctx,
           undefined,
           PREVIOUS_MOVE_COLOR,
-          this.constants.PIECE_POSITIONS[board.currentPath[0]],
+          this.constants.PIECE_POSITIONS[board.previousTurnMove[0]],
           this.constants.PIECE_RADIUS_CANVAS,
           0,
         );
@@ -156,7 +163,7 @@ export class Renderer {
           undefined,
           PREVIOUS_MOVE_COLOR,
           this.constants.PIECE_POSITIONS[
-            board.currentPath[board.currentPath.length - 1]
+            board.previousTurnMove[board.previousTurnMove.length - 1]
           ],
           this.constants.PIECE_RADIUS_CANVAS,
           0,

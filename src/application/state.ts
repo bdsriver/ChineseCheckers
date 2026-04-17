@@ -1,17 +1,17 @@
-import type { Board } from "./board";
-import { BoardBuilder, type PlayerCount } from "./board/builder";
+import type { BoardPosition, ClientBoard, PlayerCount } from "./board/client";
+import { ClientBoardBuilder } from "./board/client/builder";
 import { Renderer } from "./renderer";
 
 type BoardState =
-  | { built: false; board: BoardBuilder }
-  | { built: true; board: Board };
+  | { built: false; board: ClientBoardBuilder }
+  | { built: true; board: ClientBoard };
 
 export class ApplicationState {
   private _renderer: Renderer;
   private _boardState: BoardState;
 
   constructor(ctx: CanvasRenderingContext2D) {
-    this._boardState = { built: false, board: new BoardBuilder() };
+    this._boardState = { built: false, board: new ClientBoardBuilder() };
     this._renderer = new Renderer(ctx);
     this.render();
 
@@ -38,12 +38,16 @@ export class ApplicationState {
   }
 
   get playerCount() {
-    return this._boardState.board.playerCount;
+    if (!this._boardState.built) {
+      return this._boardState.board.playerCount;
+    } else {
+      throw new Error("Attempted to access playerCount when board was built");
+    }
   }
 
   async startGame() {
     if (this._boardState.built) {
-      // Do nothing
+      throw new Error("Attempted to start game when board was built");
     } else {
       this._boardState = {
         built: true,
@@ -54,9 +58,18 @@ export class ApplicationState {
 
   setPlayerCount(playerCount: PlayerCount) {
     if (this._boardState.built) {
-      // Do nothing
+      throw new Error("Attempted to set payer count when board was built");
     } else {
       this._boardState.board.setPlayerCount(playerCount);
+      this.render();
+    }
+  }
+
+  setClientPosition(position: BoardPosition) {
+    if (this._boardState.built) {
+      throw new Error("Attempted to set client piece when board was built");
+    } else {
+      this._boardState.board.setClientPosition(position);
       this.render();
     }
   }
