@@ -1,18 +1,18 @@
-import { EMPTY_CELL } from "../../board";
 import {
+  Board,
   type BoardPosition,
-  ClientBoard,
+  EMPTY_CELL,
   INITIAL_PLAYERS,
   type PlayerCount,
-} from "../client";
-import { BOARD_MACROS } from "../macros";
+} from "../board";
 import { newEngine } from "./engine";
+import { BOARD_MACROS } from "./macros";
 
-export class ClientBoardBuilder {
+export class BoardBuilder {
   private _state: number[];
   private _included: Set<BoardPosition>;
   private _playerCount: PlayerCount;
-  private _clientPosition: BoardPosition
+  private _clientPosition: BoardPosition;
 
   constructor() {
     this._state = Array<number>(BOARD_MACROS.positions.length).fill(EMPTY_CELL);
@@ -68,6 +68,11 @@ export class ClientBoardBuilder {
 
   async build() {
     const engine = await newEngine(this._playerCount);
-    return new ClientBoard(engine, this._state, this._playerCount, this._clientPosition);
+    return new Board(
+      engine,
+      this._state,
+      this._playerCount,
+      this._clientPosition,
+    );
   }
 }

@@ -3,7 +3,7 @@ import {
   type BoardPosition,
   INITIAL_PLAYERS,
   type PlayerCount,
-} from "../application/board/client";
+} from "../application/board";
 import type { ApplicationState } from "../application/state";
 import { ICONS } from "./icons";
 

@@ -1,17 +1,17 @@
-import type { BoardPosition, ClientBoard, PlayerCount } from "./board/client";
-import { ClientBoardBuilder } from "./board/client/builder";
+import type { Board, BoardPosition, PlayerCount } from "./board";
+import { BoardBuilder } from "./board/builder";
 import { Renderer } from "./renderer";
 
 type BoardState =
-  | { built: false; board: ClientBoardBuilder }
-  | { built: true; board: ClientBoard };
+  | { built: false; board: BoardBuilder }
+  | { built: true; board: Board };
 
 export class ApplicationState {
   private _renderer: Renderer;
   private _boardState: BoardState;
 
   constructor(ctx: CanvasRenderingContext2D) {
-    this._boardState = { built: false, board: new ClientBoardBuilder() };
+    this._boardState = { built: false, board: new BoardBuilder() };
     this._renderer = new Renderer(ctx);
     this.render();
 

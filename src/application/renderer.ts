@@ -1,7 +1,7 @@
 import Color from "colorjs.io";
 import { DEBUG } from "../constants";
-import type { ClientBoard } from "./board/client";
-import type { ClientBoardBuilder } from "./board/client/builder";
+import type { Board } from "./board";
+import type { BoardBuilder } from "./board/builder";
 import { BOARD_MACROS } from "./board/macros";
 import {
   type BoardRendererConstants,
@@ -58,7 +58,7 @@ export class Renderer {
     }
   }
 
-  onMouseDown(board: ClientBoard) {
+  onMouseDown(board: Board) {
     if (this.hoveredPosition !== undefined && board.isClientsTurn) {
       if (board.state[this.hoveredPosition] === board.clientPosition) {
         this.setSelectedPiece(this.hoveredPosition, board);
@@ -73,7 +73,7 @@ export class Renderer {
     }
   }
 
-  onMouseUp(board: ClientBoard) {
+  onMouseUp(board: Board) {
     if (
       this.hoveredPosition !== undefined &&
       this.heldPieceIndex !== undefined
@@ -90,7 +90,7 @@ export class Renderer {
     this.heldPieceIndex = undefined;
   }
 
-  private setSelectedPiece(index: number | undefined, board: ClientBoard) {
+  private setSelectedPiece(index: number | undefined, board: Board) {
     this.selectedPieceIndex = index;
     if (this.selectedPieceIndex !== undefined) {
       this.computedAvailableMoves = board.getAvailableMoves(
@@ -101,7 +101,7 @@ export class Renderer {
     }
   }
 
-  renderBuilder(board: ClientBoardBuilder) {
+  renderBuilder(board: BoardBuilder) {
     window.requestAnimationFrame(() => {
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
@@ -118,7 +118,7 @@ export class Renderer {
     });
   }
 
-  render(board: ClientBoard) {
+  render(board: Board) {
     window.requestAnimationFrame(() => {
       if (this.heldPieceIndex !== undefined) {
         this.ctx.canvas.style.cursor = "grabbing";
