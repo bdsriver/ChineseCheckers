@@ -1,35 +1,36 @@
 import van from "vanjs-core";
-import type { BoardPosition } from "../board/builder";
-import { INITIAL_PLAYERS, type PlayerCount } from "../board/builder";
-import { buildRenderer, type Renderer } from "../renderer";
+import {
+  type BoardPosition,
+  INITIAL_PLAYERS,
+  type PlayerCount,
+} from "../application/board";
+import type { ApplicationState } from "../application/state";
 import { ICONS } from "./icons";
 
 const { div, input, label, button } = van.tags;
 
-export function singlePlayerSettings(renderer: Renderer) {
-  const playerCount = van.state<PlayerCount>(2);
+export function singlePlayerSettings(state: ApplicationState) {
+  const gameStarted = van.state<boolean>(false);
+  const playerCount = van.state<PlayerCount>(state.playerCount);
   const boardPosition = van.state<BoardPosition>(0);
-  const gameStarted = van.state(false);
 
-  if (!renderer.built) {
-    renderer.board.setPlayers(playerCount.val);
-  }
+  const style = {
+    field: "flex-1 flex flex-row items-center justify-center w-full",
+  };
 
   return div(
-    { class: "flex flex-col items-center justify-center gap-4" },
+    { class: "flex flex-col items-center justify-start h-full gap-4" },
     div(
-      { class: "flex-1 flex flex-row items-center justify-center gap-2" },
-      label("Player Count"),
+      { class: style.field },
+      label({ class: "flex-1" }, "Player Count"),
       div(
         {
-          class: "join",
+          class: "join flex-1",
           onchange: (e) => {
-            if (!renderer.built) {
-              const count = parseInt(e.target.value, 10) as PlayerCount;
-              playerCount.val = count;
-              boardPosition.val = INITIAL_PLAYERS[count][0];
-              renderer.board.setPlayers(count);
-            }
+            const count = parseInt(e.target.value, 10) as PlayerCount;
+            state.setPlayerCount(count);
+            boardPosition.val = INITIAL_PLAYERS[count][0];
+            playerCount.val = count;
           },
         },
         ...[2, 3, 4, 6].map((count) =>
@@ -46,11 +47,11 @@ export function singlePlayerSettings(renderer: Renderer) {
       ),
     ),
     div(
-      { class: "flex-1 flex flex-row items-center justify-center gap-2" },
-      label("Your Pieces"),
+      { class: style.field },
+      label({ class: "flex-1" }, "Your Pieces"),
       div(
         {
-          class: "join flex flex-row",
+          class: "join flex-1 flex flex-row",
         },
         ...ICONS.PLAYER_POSITION_INDICATORS.map((icon, position) =>
           button(
@@ -64,6 +65,7 @@ export function singlePlayerSettings(renderer: Renderer) {
                 ) || gameStarted.val,
               onclick: () => {
                 boardPosition.val = position as BoardPosition;
+                state.setClientPosition(position as BoardPosition);
               },
             },
             icon,
@@ -71,29 +73,21 @@ export function singlePlayerSettings(renderer: Renderer) {
         ),
       ),
     ),
-    button(
-      {
-        type: "submit",
-        class: "btn",
-        disabled: () => gameStarted.val,
-        onclick: () => {
-          void buildRenderer(renderer);
-          gameStarted.val = true;
+    div(
+      { class: style.field },
+      button(
+        {
+          type: "submit",
+          class: "btn",
+          disabled: () => gameStarted.val,
+          onclick: () => {
+            gameStarted.val = true;
+            void state.startGame();
+          },
         },
-      },
-      "Start Game",
+        "Start Game",
+      ),
     ),
-    button(
-      {
-        type: "button",
-        class: "btn",
-        onclick: () => {
-          if (renderer.built) {
-            renderer.board.tempEngineMove();
-          }
-        },
-      },
-      "Engine Move",
-    ),
+    div({ class: "flex-3/4" }),
   );
 }

@@ -3,12 +3,12 @@ import van from "vanjs-core";
 const { svg, path } = van.tags("http://www.w3.org/2000/svg");
 
 const playerTriangleFills = [
-  path({ fill: "currentColor", d: "M9 17L15 17L12 22L9 17" }),
-  path({ fill: "currentColor", d: "M6 12L3 17L9 17L6 12" }),
-  path({ fill: "currentColor", d: "M6 12L3 7L9 7L6 12" }),
   path({ fill: "currentColor", d: "M12 2L15 7L9 7L12 2" }),
   path({ fill: "currentColor", d: "M18 12L15 7L21 7L18 12" }),
   path({ fill: "currentColor", d: "M18 12L15 17L21 17L18 12" }),
+  path({ fill: "currentColor", d: "M9 17L15 17L12 22L9 17" }),
+  path({ fill: "currentColor", d: "M6 12L3 17L9 17L6 12" }),
+  path({ fill: "currentColor", d: "M6 12L3 7L9 7L6 12" }),
 ];
 
 /** Source https://tabler.io/icons (outline style, size 32, stroke 2) */

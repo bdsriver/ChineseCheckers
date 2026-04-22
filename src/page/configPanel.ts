@@ -1,5 +1,5 @@
-import van, { type State } from "vanjs-core";
-import type { Renderer } from "../renderer";
+import van from "vanjs-core";
+import type { ApplicationState } from "../application/state";
 import { ICONS } from "./icons";
 import { loginPanel } from "./loginPanel";
 import { singlePlayerSettings } from "./singlePlayerSettings";
@@ -12,7 +12,7 @@ enum GameMode {
   Ranked,
 }
 
-export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
+export function configPanel(state: ApplicationState) {
   const mode = van.state<GameMode>(GameMode.SinglePlayer);
 
   const tab = {
@@ -28,7 +28,7 @@ export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
   return div(
     {
       class:
-        "absolute top-0 left-0 w-1/5 h-svh border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
+        "absolute top-0 left-0 w-100 h-full border-r-2 border-white bg-slate-500 shadow-lg shadow-black flex items-center justify-center flex-col",
     },
     div(
       { class: "flex-1 w-full flex flex-row" },
@@ -68,7 +68,7 @@ export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
             ? shownPanel.class
             : hiddenPanel.class,
       },
-      singlePlayerSettings(renderer),
+      singlePlayerSettings(state),
     ),
     div(
       {
@@ -77,14 +77,14 @@ export function configPanel(loggedIn: State<boolean>, renderer: Renderer) {
             ? shownPanel.class
             : hiddenPanel.class,
       },
-      div({ class: () => loggedIn.val && "hidden" }, loginPanel()),
+      div({ class: () => false && "hidden" }, loginPanel()),
     ),
     div(
       {
         class: () =>
           mode.val === GameMode.Ranked ? shownPanel.class : hiddenPanel.class,
       },
-      div({ class: () => loggedIn.val && "hidden" }, loginPanel()),
+      div({ class: () => false && "hidden" }, loginPanel()),
     ),
   );
 }
