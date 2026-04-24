@@ -74,10 +74,22 @@ export function singlePlayerSettings(state: ApplicationState) {
       ),
     ),
     div(
-      { class: style.field },
+      { class: "flex-1 flex items-center gap-4" },
       button(
         {
-          type: "submit",
+          type: "button",
+          class: "btn",
+          disabled: () => !gameStarted.val,
+          onclick: () => {
+            gameStarted.val = false;
+            void state.resetGame();
+          },
+        },
+        "Reset Game",
+      ),
+      button(
+        {
+          type: "button",
           class: "btn",
           disabled: () => gameStarted.val,
           onclick: () => {

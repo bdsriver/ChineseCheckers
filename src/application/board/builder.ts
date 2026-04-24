@@ -70,7 +70,7 @@ export class BoardBuilder {
     const engine = await newEngine(this._playerCount);
     return new Board(
       engine,
-      this._state,
+      [...this._state],
       this._playerCount,
       this._clientPosition,
     );
