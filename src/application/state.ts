@@ -1,3 +1,4 @@
+import { BackendCommunicator } from "../api";
 import type { Board, BoardPosition, PlayerCount } from "./board";
 import { BoardBuilder } from "./board/builder";
 import { Renderer } from "./renderer";
@@ -9,31 +10,36 @@ type BoardState =
 export class ApplicationState {
   private _renderer: Renderer;
   private _boardState: BoardState;
+  private _api: BackendCommunicator;
 
   constructor(ctx: CanvasRenderingContext2D) {
     this._boardState = { built: false, board: new BoardBuilder() };
     this._renderer = new Renderer(ctx);
-    this.render();
+    this._api = new BackendCommunicator();
+
+    function rerender(state: ApplicationState) {
+      state.render();
+      window.requestAnimationFrame(() => rerender(state));
+    }
+
+    window.requestAnimationFrame(() => rerender(this));
 
     ctx.canvas.onmousedown = () => {
       if (this._boardState.built) {
         this._renderer.onMouseDown(this._boardState.board);
       }
-      this.render();
     };
 
     ctx.canvas.onmouseup = () => {
       if (this._boardState.built) {
         this._renderer.onMouseUp(this._boardState.board);
       }
-      this.render();
     };
 
     ctx.canvas.onmousemove = (e) => {
       if (this._boardState.built) {
         this._renderer.onMouseMove(e);
       }
-      this.render();
     };
   }
 
@@ -80,5 +86,13 @@ export class ApplicationState {
     } else {
       this._renderer.renderBuilder(this._boardState.board);
     }
+  }
+
+  login(username: string, password: string) {
+    this._api.login(username, password);
+  }
+
+  signup(username: string, password: string) {
+    this._api.signup(username, password);
   }
 }

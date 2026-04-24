@@ -8,7 +8,7 @@ type WSMessage = Record<string, boolean | string | number | object>;
 type GameStateMessage = {
   type: "game_state";
   id: number;
-  board: Record<number, [number, number][]>;
+  board: Record<number, number[]>;
   turn: number;
 };
 
@@ -91,7 +91,6 @@ export class BackendCommunicator {
     this.makeWSRequest({ type: "game_create" });
   }
 
-  // TODO Why is code a string here but a number in response?
   joinPrivateGame(gameCode: string) {
     this.makeWSRequest({ type: "game_join", code: gameCode });
   }
@@ -110,8 +109,7 @@ export class BackendCommunicator {
     });
   }
 
-  // TODO what coordinates are these in?
-  movePiece(start: [number, number], end: [number, number], resign: boolean) {
+  movePiece(start: number, end: number, resign: boolean) {
     this.makeWSRequest({ type: "move", start, end, resign });
   }
 }

@@ -155,7 +155,9 @@ export class Board {
 
   private continueGame() {
     if (this._activePlayers[this._turnIndex] !== this._clientPosition) {
-      window.requestAnimationFrame(() => this.moveBot());
+      window.setTimeout(() => {
+        window.requestAnimationFrame(() => this.moveBot());
+      }, 300);
     }
   }
 }
