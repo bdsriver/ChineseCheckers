@@ -15,12 +15,9 @@ async function main() {
     return;
   }
 
-  // Reset canvas resolution (must be done first)
   const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 
   // Initialize app state
   const appState = new ApplicationState(ctx);
